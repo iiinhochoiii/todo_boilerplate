@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from './style';
 import { FormInput } from 'components/molecules';
-import { Card } from 'components/organisms';
+import { Card, Pagination } from 'components/organisms';
 
 const HomePage = () => {
+  const [page, setPage] = useState(6);
+  const [total] = useState(62);
+
   return (
     <S.PageTemplate>
       <S.Container>
@@ -17,6 +20,9 @@ const HomePage = () => {
             <Card />
           </S.CenterContent>
         </S.ContentSection>
+        <S.PageSection>
+          <Pagination page={page} setPage={setPage} total={total} />
+        </S.PageSection>
       </S.Container>
     </S.PageTemplate>
   );

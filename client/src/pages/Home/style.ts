@@ -24,3 +24,5 @@ export const CenterContent = styled.div`
 export const ContentSection = styled.div`
   display: flex;
 `;
+
+export const PageSection = styled.section``;
