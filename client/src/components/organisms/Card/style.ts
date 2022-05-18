@@ -38,7 +38,7 @@ export const Title = styled.p`
 
 export const Text = styled.p`
   margin: 5px 0 0 0;
-  text-decoration-line: line-through;
+  /* text-decoration-line: line-through; */
   &.ref {
     font-size: 16px;
     font-weight: 700;

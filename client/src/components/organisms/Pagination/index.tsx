@@ -11,6 +11,7 @@ const Pagination = (props: Props) => {
   const { page, setPage, total } = props;
   const [pageArr, setPageArr] = useState<number[]>([]);
   const [lastPageNum, setLastPageNum] = useState(0);
+
   useEffect(() => {
     if (total > 0) {
       const pageNavSize = 5;

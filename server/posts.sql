@@ -12,4 +12,4 @@ CREATE TABLE posts (
   PRIMARY KEY(id)
 );
 
-INSERT  INTO `posts`(`id`, `content`, `createdAt`, `updatedAt`, `isDone`, `refId`) values (1, '테스트 포스트 입니다.', '2022-05-19', NULL, false, NULL);
+INSERT  INTO `posts`(`id`, `content`, `createdAt`, `updatedAt`, `isDone`, `refId`) values (1, '테스트 포스트 입니다.', '2022-05-19', NULL, 0, NULL);
