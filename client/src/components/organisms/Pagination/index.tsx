@@ -18,12 +18,13 @@ const Pagination = (props: Props) => {
       const pageSize = 10; // 한 페이지당 나오는 content 갯수
 
       const startPage = Math.ceil(page / pageNavSize - 1) * pageNavSize + 1;
+
       // const endPage = Math.ceil(page / pageNavSize) * pageNavSize;
 
       setLastPageNum(Math.ceil(total / pageSize) - 1);
       setPageArr(
         Array.from({ length: pageNavSize }, (_, i) => i + startPage).filter(
-          (i) => i < Math.ceil(total / pageSize)
+          (i) => i <= Math.ceil(total / pageSize)
         )
       );
     }

@@ -3,16 +3,17 @@ import { Button } from 'components/atoms';
 import * as S from './style';
 
 interface Props extends HTMLAttributes<HTMLInputElement> {
-  addTodo: () => void;
+  submit: () => void;
   value: string;
+  title?: string;
 }
 
 const FormInput = (props: Props) => {
-  const { addTodo } = props;
+  const { title, submit } = props;
   return (
     <S.Container>
       <S.InputWrap {...props} />
-      <Button onClick={() => addTodo()}>Add Todo</Button>
+      <Button onClick={() => submit()}>{title || 'Add Todo'}</Button>
     </S.Container>
   );
 };

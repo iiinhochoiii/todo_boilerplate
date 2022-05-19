@@ -10,24 +10,29 @@ router.get('/', (req, res) => {
 
     const isDoneQuery = isDone ? `AND isDone = ${isDone}` : '';
     const dateQuery = startAt && endAt ? `AND DATE(createdAt) BETWEEN "${dayjs(startAt).format('YYYY-MM-DD')}" AND "${dayjs(endAt).format('YYYY-MM-DD')}"` : '';
+    const pagingQuery = `LIMIT ${pageSize} OFFSET ${(page * pageSize) - pageSize}`;
 
     const sql = `
     SELECT *
     FROM posts 
     WHERE content LIKE "%${content||''}%" ${isDoneQuery} ${dateQuery}
-    ORDER BY id DESC
-    LIMIT ${pageSize} OFFSET ${(page * pageSize) - pageSize}`;
+    ORDER BY id DESC`;
 
-    db.query(sql, (err, result) => {
+    db.query(sql.replace('*', 'COUNT (*) AS total'), (err, result) => {
         if(err) {
             res.status(500).send({err: err, msg: '데이터를 불러오는 중 오류가 발생하였습니다.'});
-            return;
+            return;is
         }
-        res.status(200).json({rows: result, total: result.length})
+        const total = result[0].total;
+
+        db.query(`${sql} ${pagingQuery}`, (err, result) => {
+            if(err) {
+                res.status(500).send({err: err, msg: '데이터를 불러오는 중 오류가 발생하였습니다.'});
+                return;
+            }
+            res.status(200).json({rows: result, total: total})
+        })
     })
-
-   
-
 })
  
 // 생성
@@ -90,10 +95,10 @@ router.post('/update', (req, res) => {
 });
 
 // 완료
-router.patch('/isDone', (req, res) => {
-    const {id, isDone} = req.query;
+router.post('/isDone', (req, res) => {
+    const {id, isDone} = req.body;
 
-    if(!id || ['true', 'false'].includes(isDone) === false) {
+    if(!id || typeof isDone !== 'boolean') {
         res.status(400).send({msg: 'id 또는 isDone 값이 없습니다.'});
         return;
     }
@@ -102,7 +107,7 @@ router.patch('/isDone', (req, res) => {
         UPDATE posts SET isDone = ? WHERE id = ${id}
     `;
 
-    db.query(sql, [isDone === 'true'], (err, result) => {
+    db.query(sql, [!!isDone], (err, result) => {
         if(err || result.affectedRows === 0) {
             res.status(500).send({msg: '데이터를 수정하는 중 오류가 발생하였습니다.'});
             return;

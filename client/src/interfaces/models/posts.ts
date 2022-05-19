@@ -3,6 +3,6 @@ export interface Posts {
   content: string;
   createdAt: string | Date;
   updatedAt?: string | Date;
-  isDone: boolean;
+  isDone: boolean | number;
   refId?: number[];
 }

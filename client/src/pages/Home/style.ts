@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const PageTemplate = styled.div`
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 export const Container = styled.main`

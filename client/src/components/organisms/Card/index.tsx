@@ -7,24 +7,33 @@ import dayjs from 'dayjs';
 interface Props {
   post: Posts;
   removeItem: (id: number) => void;
+  updateItemIsDone: (id: number, isDone: boolean) => void;
+  openModalId: (id: number) => void;
 }
 
 const Card = (props: Props) => {
-  const { post, removeItem } = props;
+  const { post, removeItem, updateItemIsDone, openModalId } = props;
 
   return (
     <S.Container>
       <S.LeftContent>
-        <CheckBox />
+        <CheckBox
+          checked={Boolean(post.isDone)}
+          onClick={(isDone: boolean) => updateItemIsDone(post.id, isDone)}
+        />
       </S.LeftContent>
-      <S.MainContent>
-        <S.Title>{post.content}</S.Title>
-        {post?.refId && <S.Text className="ref">{post.refId.join(',')}</S.Text>}
-        <S.Text className="date">
+      <S.MainContent onClick={() => openModalId(post.id)}>
+        <S.Title isDone={!!post.isDone}>{post.content}</S.Title>
+        {post?.refId && (
+          <S.Text className="ref" isDone={!!post.isDone}>
+            {post.refId.join(',')}
+          </S.Text>
+        )}
+        <S.Text className="date" isDone={!!post.isDone}>
           생성일: {dayjs(post.createdAt).format('YYYY-MM-DD')}
         </S.Text>
         {post?.updatedAt && (
-          <S.Text className="date">
+          <S.Text className="date" isDone={!!post.isDone}>
             최종 변경일: {dayjs(post.updatedAt).format('YYYY-MM-DD')}
           </S.Text>
         )}

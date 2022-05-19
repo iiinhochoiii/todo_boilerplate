@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { palette } from 'styled-tools';
 
 export const Container = styled.article`
@@ -7,7 +7,7 @@ export const Container = styled.article`
   width: calc(100% - 100px);
   padding: 15px 5px;
   border-radius: 5px;
-  margin: 0 auto;
+  margin: 0 auto 15px auto;
 `;
 
 export const LeftContent = styled.div`
@@ -17,6 +17,7 @@ export const LeftContent = styled.div`
 
 export const MainContent = styled.div`
   width: 90%;
+  cursor: pointer;
 `;
 
 export const RightContent = styled.div`
@@ -30,15 +31,30 @@ export const RemoveButton = styled.button`
   font-size: 22px;
 `;
 
-export const Title = styled.p`
+interface TextProps {
+  isDone?: boolean;
+}
+
+const stylesLineThrough = css<TextProps>`
+  ${(props) => {
+    if (props.isDone) {
+      return css`
+        text-decoration-line: line-through;
+      `;
+    }
+  }}
+`;
+
+export const Title = styled.p<TextProps>`
+  ${stylesLineThrough};
   margin: 0;
   font-size: 20px;
   font-weight: 700;
 `;
 
-export const Text = styled.p`
+export const Text = styled.p<TextProps>`
+  ${stylesLineThrough};
   margin: 5px 0 0 0;
-  /* text-decoration-line: line-through; */
   &.ref {
     font-size: 16px;
     font-weight: 700;
