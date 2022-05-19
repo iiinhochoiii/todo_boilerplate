@@ -18,7 +18,7 @@ const HomePage = () => {
   const getList = async (): Promise<void> => {
     try {
       const res = await axios.get('/posts');
-      setPosts(res.data);
+      setPosts(res.data.rows);
     } catch (err) {
       console.log(err);
     }
