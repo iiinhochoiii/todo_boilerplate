@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 interface Props {
   post: Posts;
   removeItem: (id: number) => void;
-  updateItemIsDone: (id: number, isDone: boolean) => void;
+  updateItemIsDone: (id: number) => void;
   openModalId: (id: number) => void;
 }
 
@@ -19,14 +19,17 @@ const Card = (props: Props) => {
       <S.LeftContent>
         <CheckBox
           checked={Boolean(post.isDone)}
-          onClick={(isDone: boolean) => updateItemIsDone(post.id, isDone)}
+          onClick={() => updateItemIsDone(post.id)}
         />
       </S.LeftContent>
       <S.MainContent onClick={() => openModalId(post.id)}>
-        <S.Title isDone={!!post.isDone}>{post.content}</S.Title>
+        <S.Title isDone={!!post.isDone}>
+          <span style={{ fontSize: '13px' }}>{`[${post.id}] `}</span>
+          {post.content}
+        </S.Title>
         {post?.refId && (
           <S.Text className="ref" isDone={!!post.isDone}>
-            {post.refId.join(',')}
+            {post.refId.map((item) => `@${item}`).join(', ')}
           </S.Text>
         )}
         <S.Text className="date" isDone={!!post.isDone}>

@@ -4,6 +4,7 @@ import { FormInput } from 'components/molecules';
 import { Card, Pagination, UpdateModal } from 'components/organisms';
 import axios from 'utils/axios';
 import { Posts } from 'interfaces/models/posts';
+import { getIdByUniq } from 'utils/getIdByUniq';
 
 const HomePage = () => {
   const [page, setPage] = useState(1);
@@ -13,10 +14,24 @@ const HomePage = () => {
 
   const [isShowModal, setIsShowModal] = useState(false);
   const [selectId, setSelectId] = useState<number | null>(null);
+  const [allItems, setAllItems] = useState<Posts[]>([]);
+
+  useEffect(() => {
+    getAllList();
+  }, []);
 
   useEffect(() => {
     getList();
   }, [page]);
+
+  const getAllList = async (): Promise<void> => {
+    try {
+      const res = await axios.get('/posts/all');
+      setAllItems(res.data.rows);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const getList = async (): Promise<void> => {
     try {
@@ -61,28 +76,38 @@ const HomePage = () => {
     }
   };
 
-  const updateItemIsDone = async (
-    id: number,
-    isDone: boolean
-  ): Promise<void> => {
+  const updateItemIsDone = async (id: number): Promise<void> => {
     try {
-      await axios.post('/posts/isDone', {
+      const res = await axios.post('/posts/isDone', {
         id: id,
-        isDone: isDone,
       });
 
+      if (!res.data.status) {
+        alert(res.data.msg);
+      }
       getList();
     } catch (err) {
       console.log(err);
     }
   };
 
-  const updateItem = async (content: string): Promise<void> => {
+  const updateItem = async (content: string, refId?: string): Promise<void> => {
     try {
+      const refIdList = getIdByUniq(refId) || [];
+
+      const filterList = refIdList.filter((item) => {
+        const findItem = allItems.find((f) => f.id === item);
+        return findItem && findItem.id;
+      });
+
       await axios.post('/posts/update', {
         id: selectId,
         content: content,
+        ...(filterList.length > 0 && {
+          refId: JSON.stringify(filterList),
+        }),
       });
+
       getList();
       setSelectId(null);
       setIsShowModal(false);
@@ -117,9 +142,7 @@ const HomePage = () => {
                 key={post.id}
                 post={post}
                 removeItem={(id: number) => removeItem(id)}
-                updateItemIsDone={(id: number, isDone: boolean) =>
-                  updateItemIsDone(id, isDone)
-                }
+                updateItemIsDone={(id: number) => updateItemIsDone(id)}
                 openModalId={(id: number) => openModalId(id)}
               />
             ))}
@@ -133,7 +156,14 @@ const HomePage = () => {
       <UpdateModal
         isOpen={isShowModal}
         setIsShowModalCallback={(value: boolean) => setIsShowModal(value)}
-        updateItem={(content: string) => updateItem(content)}
+        updateItem={(content: string, refId?: string) =>
+          updateItem(content, refId)
+        }
+        value={posts.find((post) => post.id === selectId)?.content}
+        refId={posts
+          .find((post) => post.id === selectId)
+          ?.refId?.map((item) => `@${item}`)
+          .join(', ')}
       />
     </S.PageTemplate>
   );

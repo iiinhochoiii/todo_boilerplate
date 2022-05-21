@@ -1,26 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './style';
 import { FaCheck } from 'react-icons/fa';
 
 interface Props {
   sx?: React.CSSProperties;
   checked: boolean;
-  onClick: (isDone: boolean) => void;
+  onClick: () => void;
 }
 const CheckBox = (props: Props) => {
-  const { sx, checked, onClick } = props;
+  const { sx, checked } = props;
   const [isChecked, setIsChecked] = useState(checked);
 
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
+
   return (
-    <S.Wrap
-      {...props}
-      style={sx}
-      onClick={(e) => {
-        onClick(!isChecked);
-        setIsChecked(!isChecked);
-      }}
-      checked={isChecked}
-    >
+    <S.Wrap {...props} style={sx} checked={isChecked}>
       {isChecked && <FaCheck size={'0.55rem'} />}
     </S.Wrap>
   );
