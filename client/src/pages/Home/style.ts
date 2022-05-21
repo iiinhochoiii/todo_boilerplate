@@ -11,18 +11,11 @@ export const Container = styled.main`
   margin: 0 auto;
 `;
 
-export const AddSection = styled.section`
-  margin: 30px 0;
-  display: flex;
-`;
-
 export const CenterContent = styled.div`
-  margin: 0 auto;
+  margin: 0 auto 30px auto;
   width: auto;
 `;
 
-export const ContentSection = styled.div`
+export const Section = styled.section`
   display: flex;
 `;
-
-export const PageSection = styled.section``;

@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Modal from 'react-modal';
 import * as S from './style';
 import { FormInput } from 'components/molecules';
 import { Button, Input } from 'components/atoms';
+import { AppContext } from 'contexts/posts';
+import useAllList from 'pages/Home/hooks/useAllList';
+import { Posts } from 'interfaces/models/posts';
 
 const customStyles = {
   content: {
@@ -19,24 +22,37 @@ const customStyles = {
 interface Props {
   isOpen: boolean;
   setIsShowModalCallback: (value: boolean) => void;
-  updateItem: (content: string, refId?: string) => void;
-  value?: string;
-  refId?: string;
+  selectId: number | null;
 }
 
 const UpdateModal = (props: Props) => {
-  const { isOpen, setIsShowModalCallback, updateItem, value, refId } = props;
+  const { posts, updateItem } = useContext(AppContext);
+  const { list } = useAllList<Posts>('/posts/all');
+  const { isOpen, setIsShowModalCallback, selectId } = props;
   const [updateContent, setUpdateContent] = useState('');
   const [refIdContent, setRefIdContent] = useState('');
 
   useEffect(() => {
-    if (value) {
-      setUpdateContent(value);
+    if (selectId) {
+      setUpdateContent(
+        posts.find((post) => post.id === selectId)?.content || ''
+      );
+
+      setRefIdContent(
+        posts
+          .find((post) => post.id === selectId)
+          ?.refId?.map((item) => `@${item}`)
+          .join(' ') || ''
+      );
     }
-    if (refId) {
-      setRefIdContent(refId);
+  }, [selectId]);
+
+  const update = () => {
+    if (selectId) {
+      updateItem(selectId, updateContent, list, refIdContent);
+      setIsShowModalCallback(false);
     }
-  }, [value, refId]);
+  };
 
   return (
     <Modal
@@ -56,7 +72,7 @@ const UpdateModal = (props: Props) => {
           setUpdateContent(e.target.value)
         }
         submit={() => {
-          updateItem(updateContent, refIdContent.trim());
+          update();
           setRefIdContent('');
         }}
         title={'Update Todo'}

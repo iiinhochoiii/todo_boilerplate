@@ -4,6 +4,7 @@ import * as S from './style';
 interface Props extends HTMLAttributes<HTMLInputElement> {
   sx?: React.CSSProperties;
   value: string;
+  name?: string;
 }
 
 const Input = (props: Props) => {

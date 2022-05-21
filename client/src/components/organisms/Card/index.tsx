@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import * as S from './style';
 import { CheckBox } from 'components/atoms';
 import { Posts } from 'interfaces/models/posts';
 import dayjs from 'dayjs';
-
+import { AppContext } from 'contexts/posts';
 interface Props {
   post: Posts;
-  removeItem: (id: number) => void;
-  updateItemIsDone: (id: number) => void;
   openModalId: (id: number) => void;
 }
 
 const Card = (props: Props) => {
-  const { post, removeItem, updateItemIsDone, openModalId } = props;
+  const { removeItem, updateItemIsDone } = useContext(AppContext);
+  const { post, openModalId } = props;
 
   return (
     <S.Container>
@@ -29,7 +28,7 @@ const Card = (props: Props) => {
         </S.Title>
         {post?.refId && (
           <S.Text className="ref" isDone={!!post.isDone}>
-            {post.refId.map((item) => `@${item}`).join(', ')}
+            {post.refId.map((item) => `@${item}`).join(' ')}
           </S.Text>
         )}
         <S.Text className="date" isDone={!!post.isDone}>

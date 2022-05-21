@@ -4,7 +4,7 @@ import { palette } from 'styled-tools';
 export const Container = styled.div`
   display: flex;
   justify-content: center;
-  margin: 30px 0 0 0;
+  margin: 30px auto;
 `;
 
 const buttonStyles = css`

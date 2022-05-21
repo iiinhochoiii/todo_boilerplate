@@ -6,3 +6,10 @@ export interface Posts {
   isDone: boolean | number;
   refId?: number[];
 }
+
+export interface searchPost {
+  content?: string;
+  startAt?: string;
+  endAt?: string;
+  isDone?: string;
+}
