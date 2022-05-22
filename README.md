@@ -40,7 +40,24 @@ DB를 설치할때 사용자가 지정한 비밀번호로 입력 합니다. 만�
 
 그러면 로컬에 wisely_test 라는 테이블이 생성 됩니다.
 
-그리고 /server/config/database.js 파일에서 패스워드를, DB를 설치할 때 사용자가 지정한 비밀번호로 수정 합니다.
+> (중요) 그리고 /server/config/database.js 파일에서 패스워드를, DB를 설치할 때 사용자가 지정한 비밀번호로 수정 합니다.
+
+```js
+const mysql = require('mysql2');
+
+const db_info = {
+    host: 'localhost',
+    port: '3306',
+    user: 'root',
+    password: '1234', // <- 이쪽 부분 비밀번호를 변경 해 줍니다.
+    database: 'wisely_test'
+}
+
+const connection = mysql.createConnection(db_info);
+connection.connect();
+
+module.exports = connection;
+```
 
 이제 다음과 같이 터미널에 입력하여 프로젝트를 실행합니다.
 
