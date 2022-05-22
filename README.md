@@ -19,6 +19,23 @@
    - Etc: Eslint, Prettier 등등
 
 ---
+### 프로젝트 받고 실행 준비
+
+1. 먼저 해당 프로젝트를 Clone을 받아주세요.
+2. 클론을 받고, wisely_project 폴더로 이동하여, node_modules을 설치 해주세요.
+```js
+// 경로 wisely_project 이동 후, node_modules 설치
+
+npm install
+```
+
+3. wisely_project 경로에서 설치가 완료 되었다면, client 폴더로 이동 프론트에 대한 node_modules도 설치 해줍니다.
+
+```js
+// cd client
+npm install
+```
+---
 
 ### 실행 방법
 (필수) mysql 8버전 이상을 설치 해주어야 합니다.
