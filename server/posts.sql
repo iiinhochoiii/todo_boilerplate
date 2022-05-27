@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS wisely_test;
-CREATE DATABASE wisely_test;
-USE wisely_test;
+DROP DATABASE IF EXISTS todo_test;
+CREATE DATABASE todo_test;
+USE todo_test;
 
 CREATE TABLE posts (
   `id` INT NOT NULL AUTO_INCREMENT,
